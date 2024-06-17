@@ -16,7 +16,7 @@ app.use(express.json()); // using this every req will be parsed through json
 // db connection with mongodb
 //mongodb+srv://balabittu1143:abcdef123@cluster0.rhabnqx.mongodb.net/
 
-mongoose.connect("mongodb+srv://balabittu1143:abcdef123@cluster0.rhabnqx.mongodb.net/lifestyle");
+mongoose.connect(process.env.MONGO_URL);
  
 
 // api
@@ -26,27 +26,28 @@ app.get("/",(req,res)=>{
 })
 
 // image storage engine
-const storage = multer.diskStorage({
-    destination: './upload/images',
-    filename: (req,file,cb)=>{
-        return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
-    }
-})
-// using multer we create one upload function 
-const upload = multer({storage:storage});
-// creating upload end-point 
-app.use('/images',express.static("upload/images"));
+// const storage = multer.diskStorage({
+//     destination: './upload/images',
+//     filename: (req,file,cb)=>{
+//         return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+//     }
+// })
+// // using multer we create one upload function 
+// const upload = multer({storage:storage});
+// // creating upload end-point 
+// app.use('/images',express.static("upload/images"));
 
 
-app.post("/upload",upload.single('product'), async (req,res)=>{
-    // await cloudinary.uploader.upload(req.file.filename,{
-    //     upload_preset: presetName
-    // })
-    res.json({
-        success:1,
-        image_url: `http://localhost:${port}/images/${req.file.filename}`
-    })
-})  
+// app.post("/upload",upload.single('product'), async (req,res)=>{
+//     // await cloudinary.uploader.upload(req.file.filename,{
+//     //     upload_preset: presetName
+//     // })
+//     res.json({
+//         success:1,
+//         image_url: `http://localhost:${port}/images/${req.file.filename}`
+//     })
+// })  
+
 
 // schema for products
 const Product = mongoose.model("Product",{
